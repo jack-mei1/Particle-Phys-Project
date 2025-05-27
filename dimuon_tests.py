@@ -19,7 +19,7 @@ observed_counts, _ = np.histogram(df["M"], bins=bins)
 
 # expected function
 mu = 3.097 # J/psi mass
-def model(m, A, B0, B1, stdev): # gpt equation magic
+def model(m, A, B0, B1, stdev): # gpt equation magic (it's a PDF (probability distr. function) for Gaussian/Normal distributions)
     signal = (A / (stdev*np.sqrt(2*np.pi))) * np.exp(-0.5*((m-mu)/stdev)**2)
     bg = B0 + B1 * m
     return (signal + bg) * width
