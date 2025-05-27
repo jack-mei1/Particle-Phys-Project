@@ -19,7 +19,7 @@ observed_counts, _ = np.histogram(df["M"], bins=bins)
 
 # expected function
 mu = 3.097 # J/psi mass
-def model(m, A, B0, B1, stdev): # gpt equation magic (it's a PDF (probability distr. function) for Gaussian/Normal distributions)
+def model(m, A, B0, B1, stdev): # PDF (probability distr. function) for Gaussian/Normal distributions
     signal = (A / (stdev*np.sqrt(2*np.pi))) * np.exp(-0.5*((m-mu)/stdev)**2)
     bg = B0 + B1 * m
     return (signal + bg) * width
@@ -43,6 +43,23 @@ print(f"Chi-Square: {chi_squared:.2f}")
 print(f"DOF: {dof}")
 print(f"Chi-Squared per DOF: {chi_squared / dof:.2f}")
 print(f"P-Val: {p_val:.3e}")
+
+# 95% t-interval
+peak = df[(df["M"] >= 3.06) & (df["M"] <= 3.14)] # window around the peak area
+sample = peak["M"]
+
+xbar = sample.mean()
+s = sample.std(ddof=1)
+n = len(sample)
+
+confidence = 0.95
+alpha = 1 - confidence
+critical_t = t.ppf(1 - (alpha/2), df=(n-1))
+
+moe = critical_t * (s/np.sqrt(n)) # margin of error for t intervals
+lower = xbar - moe
+upper = xbar + moe
+print(f"95% T-Interval for the mean J/ψ mass: ({lower:.4f}, {upper:.4f}) GeV")
 
 # plot
 plt.figure(figsize=(10, 6))
