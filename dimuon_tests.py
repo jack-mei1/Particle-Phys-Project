@@ -6,7 +6,7 @@ from scipy.optimize import curve_fit
 
 # data loader
 invariant_mass = pd.read_csv("Jpsimumu_Run2011A.csv")["M"]
-mass_spike = invariant_mass[(invariant_mass >= 3.0) & (invariant_mass <= 3.25)] # cut off shitty edges bc expected curve is awful
+mass_spike = invariant_mass[(invariant_mass >= 3.0) & (invariant_mass <= 3.25)] # cut off edges bc expected curve is awful
 df = pd.DataFrame(mass_spike)
 
 # bins
@@ -52,14 +52,14 @@ xbar = sample.mean()
 s = sample.std(ddof=1)
 n = len(sample)
 
-confidence = 0.95
+confidence = 0.99
 alpha = 1 - confidence
 critical_t = t.ppf(1 - (alpha/2), df=(n-1))
 
 moe = critical_t * (s/np.sqrt(n)) # margin of error for t intervals
 lower = xbar - moe
 upper = xbar + moe
-print(f"95% T-Interval for the mean J/ψ mass: ({lower:.4f}, {upper:.4f}) GeV")
+print(f"99% T-Interval for the mean J/ψ mass: ({lower:.4f}, {upper:.4f}) GeV")
 
 # plot
 plt.figure(figsize=(10, 6))
